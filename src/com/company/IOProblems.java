@@ -42,7 +42,7 @@ public class IOProblems {
     }
 
     /*
-    * 1) 3. Write a Java program to check if a file or directory specified by pathname exists or not.
+    * 1) Write a Java program to check if a file or directory specified by pathname exists or not.
     * */
     public static boolean isExist(File file) {
         return file.exists();
@@ -93,13 +93,14 @@ public class IOProblems {
     /*
     * 6) Write a Java program to read contents from a file into byte array.
     * */
-    public static byte[] readIntoByteArray(File file) throws IOException {
-        String s = file.getAbsolutePath();
-
+    public static byte[] readIntoByteArray(File file) {
         byte[] fileInArray = new byte[(int)file.length()];
 
-        FileInputStream f = new FileInputStream(s);
-        f.read(fileInArray);
+        try(FileInputStream f = new FileInputStream(file.getAbsolutePath())){
+            f.read(fileInArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return fileInArray;
     }
@@ -109,8 +110,7 @@ public class IOProblems {
     * */
     public static String readLine(File file) {
         String line = null;
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
             line = reader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -132,13 +132,11 @@ public class IOProblems {
 
         String strLine = "";
         StringBuilder strData = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+        try(BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
             while (strLine != null)
             {
                 strData.append(strLine);
                 strLine = br.readLine();
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -152,8 +150,7 @@ public class IOProblems {
     public static ArrayList<String> readIntoStringArray(File file) {
         String strLine = "";
         ArrayList<String> strData = new ArrayList<>();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+        try(BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
             while (strLine != null)
             {
                 strData.add(strLine);
@@ -181,7 +178,6 @@ public class IOProblems {
         try (FileInputStream fin = new FileInputStream(file)){
             int i;
             while((i = fin.read()) != -1){
-
                 System.out.print((char) i);
             }
         } catch (IOException e) {
@@ -203,12 +199,12 @@ public class IOProblems {
             e.printStackTrace();
         }
 
-
         while (true) {
             assert sc != null;
 
-            if (!sc.hasNext())
+            if (!sc.hasNext()) {
                 break;
+            }
 
             current = sc.next();
 
